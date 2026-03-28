@@ -1,16 +1,23 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Redirection to Obsidian</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#15141b" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <title>Obsidian Notifier PWA</title>
     <style>
+      :root {
+        color-scheme: dark;
+      }
+      * {
+        box-sizing: border-box;
+      }
       body {
-        width: 100vw;
-        height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
         background-color: #15141b;
         color: #fff;
         font-family:
@@ -27,74 +34,94 @@
           "Helvetica Neue",
           sans-serif;
       }
-      a {
-        margin-top: 10px;
-        padding: 15px 60px;
-        background-color: #1b1b1d;
-        border-radius: 10px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        text-decoration: none;
-        color: #fff;
-        font-weight: 500;
-        letter-spacing: 0.5px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-        background-color: #164eb6;
-        transition: transform ease 200ms;
-        cursor: pointer;
-      }
-      a:hover {
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-        transform: scale(1.01);
-      }
-      .reminder-txt {
-        background-color: #1d1b23;
-        padding: 25px 50px;
-        border-radius: 15px;
-        font-size: 28px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border: 1px solid #27282f;
-      }
-      .reminder-txt > img {
-        margin-right: 20px;
+      main {
+        width: min(680px, 92vw);
+        background: #1d1b23;
+        border: 1px solid #2d2c33;
+        border-radius: 12px;
+        padding: 24px;
       }
       h1 {
-        font-size: 48px;
-        font-weight: 700;
-        margin-bottom: 15px;
+        margin: 0 0 8px;
       }
-      .caption {
-        font-size: 10px;
-        font-weight: 100;
-        padding: 0px;
-        margin-top: 5px;
+      p {
+        margin: 0 0 16px;
+        color: #cbcad3;
+      }
+      .row {
+        display: grid;
+        gap: 10px;
+      }
+      label {
+        font-size: 14px;
+        color: #d8d6e1;
+      }
+      input,
+      textarea,
+      button {
+        width: 100%;
+        border-radius: 10px;
+        border: 1px solid #383643;
+        background: #14131a;
+        color: #fff;
+        font: inherit;
+      }
+      input,
+      textarea {
+        padding: 10px 12px;
+      }
+      textarea {
+        min-height: 180px;
+        resize: vertical;
+      }
+      button {
+        padding: 10px 14px;
+        background: #164eb6;
+        border: 0;
+        cursor: pointer;
+        font-weight: 600;
+      }
+      button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+      .status {
+        margin-top: 12px;
+        font-size: 14px;
+      }
+      .subtle {
+        margin-top: 20px;
+        font-size: 13px;
+      }
+      a {
+        color: #7ab8ff;
       }
     </style>
   </head>
   <body>
-    <h1>🔔 Reminder</h1>
-    <div class="reminder-txt"><img src="./check.jpg" width="28" /> <span id="reminder-text"></span></div>
-    <p>If redirection didn't happen automatically, click this button</p>
-    <a id="redirection-url">Open Obsidian</a>
-    <p class="caption">it will open Obsidian with your reminder</p>
+    <main>
+      <h1>🔔 Obsidian Notifier PWA</h1>
+      <p>This app only receives push notifications and shows them on your device.</p>
 
-    <script type="text/javascript" defer>
-      const searchParams = new URLSearchParams(window.location.search);
-      const remnoteDeeplink = searchParams.get("deeplink");
-      const reminderText = searchParams.get("reminderText");
+      <div class="row">
+        <label for="vapidKey">VAPID public key (from your local Node server)</label>
+        <input id="vapidKey" type="text" placeholder="BEl3..." autocomplete="off" />
+        <button id="subscribeBtn" type="button">Enable push notifications</button>
+      </div>
 
-      const a = document.querySelector("#redirection-url");
-      a.href = remnoteDeeplink;
+      <p class="status" id="status">Status: waiting</p>
 
-      const span = document.querySelector("#reminder-text");
-      span.innerHTML = reminderText;
+      <div class="row">
+        <label for="subscriptionOutput">Push subscription (copy this to your backend)</label>
+        <textarea id="subscriptionOutput" readonly placeholder="Subscription JSON will appear here"></textarea>
+      </div>
 
-      setTimeout(() => {
-        window.location.replace(remnoteDeeplink);
-      }, 100);
-    </script>
+      <p class="subtle">
+        Redirection route:
+        <a href="/redirection-page">/redirection-page</a>
+      </p>
+    </main>
+
+    <script src="/app.js" defer></script>
   </body>
 </html>
