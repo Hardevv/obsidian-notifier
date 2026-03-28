@@ -5,6 +5,16 @@ This Backend stores it as `new Data()` then it stores it as UTC in `data.json` -
 
 ---
 
+PWA <> Backend without direct contact:
+
+- PWA never sends subscription directly to backend.
+- Generate subscription in PWA and copy/download JSON.
+- Put subscriptions in `push-subscriptions.json` as array.
+- Backend reads `push-subscriptions.json` and sends Web Push using VAPID keys from env.
+- Required env vars for push: `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, optional `VAPID_SUBJECT`.
+
+---
+
 Multiple vault support:
 you have to store all of your vaults in a single location.
 For example `Documents/Obsidian` you can store there multiple vaults
