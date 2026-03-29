@@ -46,7 +46,7 @@ export const initVapidKeys = () => {
   if (!vapidKeys) return
   const isDev = process.env.ENV === 'dev'
   // port from package.json
-  const pwaUrl = `${isDev ? 'http://localhost:5500/pwa' : process.env.PWA_URL}/?pubKey=${vapidKeys.publicKey}`
+  const pwaUrl = `${isDev ? 'http://localhost:5500' : process.env.PWA_URL}/?pubKey=${vapidKeys.publicKey}`
 
   //TODO: investigate what to do whit that emial thing
   webpush.setVapidDetails('mailto:you@example.com', vapidKeys.publicKey, vapidKeys.privateKey)
@@ -56,7 +56,10 @@ export const initVapidKeys = () => {
 }
 
 const parseSubscriptionsFile = (): PushSubscription[] => {
-  if (!existsSync(PUSH_SUBSCRIPTIONS_PATH)) return []
+  if (!existsSync(PUSH_SUBSCRIPTIONS_PATH)) {
+    writeFileSync(PUSH_SUBSCRIPTIONS_PATH, '[]')
+    return []
+  }
 
   try {
     const pushSubscriptions = readFileSync(PUSH_SUBSCRIPTIONS_PATH, 'utf-8')
@@ -88,9 +91,13 @@ export const sendWebPush = async ({ vaultName, filePath, id, content }: Reminder
   const obsidianLink = sendObsidianLink
     ? getObsidianAdvancedUriBlockLink(vaultName, filePath, id)
     : null
+
+  const redirectionBase =
+    process.env.ENV === 'dev' ? 'http://localhost:5500/redirection' : REDIRECTION_PAGE_URL
+
   // TODO: it should not have redirection page url if it's send to PWA, pwa should just redirect
   const url = obsidianLink
-    ? `${REDIRECTION_PAGE_URL}?deeplink=${encodeURIComponent(obsidianLink)}`
+    ? `${redirectionBase}?deeplink=${encodeURIComponent(obsidianLink)}`
     : undefined
 
   const payload = {
