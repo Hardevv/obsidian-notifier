@@ -42,3 +42,10 @@ Obsidian CLI is not headless so it will open all of your selected vaults
   - Privacy settings
     - reminder content toggle - you can choose whether to send your reminder text to your Discord channel
     - Obsidian link toggle - you can choose whether to send a link to your reminder
+
+---
+
+## Requirements
+
+- Obsidian version with CLI [Add version here]
+- make sure you have search enabled [put screen]
