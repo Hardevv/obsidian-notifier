@@ -1,8 +1,9 @@
 {
-  "name": "obsidian-notifier-pwa",
-  "private": true,
+  "name": "remindair",
+  "private": false,
   "version": "1.0.0",
   "type": "module",
+  "author": "Hardevv",
   "scripts": {
     "dev": "vite --host --port 5500",
     "build": "vite build",

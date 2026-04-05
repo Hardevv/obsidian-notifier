@@ -1,7 +1,7 @@
 /* global self caches fetch URL */
 
 const APP_CACHE = 'obsidian-notifier-v1'
-const BASE = '/pwa'
+const BASE = '/page'
 const APP_SHELL = [`${BASE}/`, `${BASE}/manifest.webmanifest`]
 
 self.addEventListener('install', event => {
