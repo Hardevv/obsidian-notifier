@@ -14,16 +14,20 @@
   const base = import.meta.env.BASE_URL.replace(/\/$/, '')
 
   onMount(async () => {
+    // Handle GitHub Pages SPA redirect FIRST
     const params = new URLSearchParams(window.location.search)
     const redirectPath = params.get('p')
     if (redirectPath) {
       history.replaceState(null, '', redirectPath)
     }
+
     try {
       appStore.updateSwRegistration(await registerServiceWorker())
     } catch {
       isLoading = false
     }
+
+    // Setup router AFTER URL is fixed
     const router = navaid(base)
 
     router.on('/', () => {
