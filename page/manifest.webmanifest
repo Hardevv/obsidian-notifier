@@ -1,6 +1,6 @@
 {
-  "name": "Obsidian Notifier",
-  "short_name": "Notifier",
+  "name": "RemindAir",
+  "short_name": "RemindAir",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
