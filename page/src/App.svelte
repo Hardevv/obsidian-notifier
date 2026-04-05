@@ -11,6 +11,8 @@
   let currentPage: string = 'home'
   let isLoading = true
 
+  const base = import.meta.env.BASE_URL.replace(/\/$/, '')
+
   onMount(async () => {
     try {
       appStore.updateSwRegistration(await registerServiceWorker())
