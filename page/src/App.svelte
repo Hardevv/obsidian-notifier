@@ -14,12 +14,17 @@
   const base = import.meta.env.BASE_URL.replace(/\/$/, '')
 
   onMount(async () => {
+    const params = new URLSearchParams(window.location.search)
+    const redirectPath = params.get('p')
+    if (redirectPath) {
+      history.replaceState(null, '', redirectPath)
+    }
     try {
       appStore.updateSwRegistration(await registerServiceWorker())
     } catch {
       isLoading = false
     }
-    const router = navaid()
+    const router = navaid(base)
 
     router.on('/', () => {
       currentPage = 'landing'
