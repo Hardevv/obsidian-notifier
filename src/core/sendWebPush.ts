@@ -46,7 +46,7 @@ export const initVapidKeys = () => {
   if (!vapidKeys) return
   const isDev = process.env.ENV === 'dev'
   // port from package.json
-  const pwaUrl = `${isDev ? 'http://localhost:5500' : process.env.PWA_URL}/?pubKey=${vapidKeys.publicKey}`
+  const pwaUrl = `${isDev ? 'http://localhost:5500/notifications' : process.env.PWA_URL}?pubKey=${vapidKeys.publicKey}`
 
   //TODO: investigate what to do whit that emial thing
   webpush.setVapidDetails('mailto:you@example.com', vapidKeys.publicKey, vapidKeys.privateKey)

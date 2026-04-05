@@ -110,6 +110,16 @@ button {
   margin-top: 16px;
 }
 
+.mb-s {
+  margin-bottom: 8px;
+}
+
+.border-t {
+  border-top: 1px solid #43486e;
+  margin-top: 8px;
+  padding-top: 8px;
+}
+
 a {
   color: #7ab8ff;
 }

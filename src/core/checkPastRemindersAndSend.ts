@@ -7,7 +7,7 @@ export const checkPastRemindersAndSend = async () => {
   const now = new Date()
   const data = getData()
 
-  for (const reminder of data.reminders) {
+  for (const [index, reminder] of data.reminders.entries()) {
     if (!validateStringReminder(reminder)) {
       logger.error({ reminder }, 'Invalid reminder format')
       continue
@@ -15,7 +15,6 @@ export const checkPastRemindersAndSend = async () => {
     const diff = now.getTime() - new Date(reminder.dateTime).getTime()
 
     if (diff >= 0 && !reminder.sent && reminder.id && !reminder.deleted) {
-      const index = data.reminders.findIndex(r => r.id === reminder.id)
       try {
         // TODO: create flag to turn off one method of sending if user doesn't want both
         await Promise.all([sentDiscordWebhook(reminder), sendWebPush(reminder)])
