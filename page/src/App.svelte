@@ -9,9 +9,14 @@
   import RedirectionPage from './pages/RedirectionPage.svelte'
 
   let currentPage: string = 'home'
+  let isLoading = true
 
   onMount(async () => {
-    appStore.updateSwRegistration(await registerServiceWorker())
+    try {
+      appStore.updateSwRegistration(await registerServiceWorker())
+    } catch {
+      isLoading = false
+    }
     const router = navaid()
 
     router.on('/', () => {
@@ -31,7 +36,7 @@
 </script>
 
 {#if currentPage === 'notifications'}
-  <NotificationsApp />
+  <NotificationsApp bind:isLoading />
 {:else if currentPage === 'landing'}
   <LandingPage />
 {:else if currentPage === 'redirection'}
