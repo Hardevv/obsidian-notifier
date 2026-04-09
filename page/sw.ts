@@ -1,4 +1,3 @@
-// Minimal type declarations for Service Worker events (for build only)
 interface ExtendableEvent extends Event {
   waitUntil(promise: Promise<unknown>): void
 }
@@ -35,7 +34,6 @@ interface ServiceWorkerGlobalScope {
   clients: Clients
   registration: ServiceWorkerRegistration
 }
-/* global self caches fetch URL */
 
 const sw = self as unknown as ServiceWorkerGlobalScope
 
