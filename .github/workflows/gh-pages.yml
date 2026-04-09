@@ -2,7 +2,7 @@ name: Deploy page to GitHub Pages
 
 on:
   push:
-    branches: [main]
+    branches: [main, dev]
     paths:
       - 'page/**'
       - '.github/workflows/gh-pages.yml'
