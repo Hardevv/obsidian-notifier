@@ -56,11 +56,6 @@ export const initVapidKeys = () => {
 }
 
 const parseSubscriptionsFile = (): PushSubscription[] => {
-  if (!existsSync(PUSH_SUBSCRIPTIONS_PATH)) {
-    writeFileSync(PUSH_SUBSCRIPTIONS_PATH, '[]')
-    return []
-  }
-
   try {
     const pushSubscriptions = readFileSync(PUSH_SUBSCRIPTIONS_PATH, 'utf-8')
     if (!pushSubscriptions.trim()) return []
