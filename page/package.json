@@ -16,7 +16,9 @@
     "svelte": "^5.39.6",
     "svelte-check": "^4.4.5",
     "typescript": "^6.0.2",
-    "vite": "^7.1.5"
+    "vite": "^7.1.5",
+    "vite-plugin-pwa": "^1.2.0",
+    "workbox-window": "^7.4.0"
   },
   "dependencies": {
     "navaid": "^1.2.0"
