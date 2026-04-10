@@ -43,12 +43,7 @@ const APP_SHELL = [`${BASE}/`, `${BASE}/manifest.webmanifest`]
 
 sw.addEventListener('install', event => {
   const installEvent = event as ExtendableEvent
-
-  installEvent.waitUntil(
-    caches.open(APP_CACHE).then((cache: Cache) => {
-      return cache.addAll(APP_SHELL)
-    })
-  )
+  installEvent.waitUntil(caches.open(APP_CACHE).then((cache: Cache) => cache.addAll(APP_SHELL)))
   sw.skipWaiting()
 })
 
@@ -83,15 +78,17 @@ sw.addEventListener('push', event => {
 
   try {
     const parsed = pushEvent.data ? pushEvent.data.json() : {}
-    if (parsed && typeof parsed === 'object') {
-      payload = parsed as Record<string, unknown>
-    }
+    if (parsed && typeof parsed === 'object') payload = parsed as Record<string, unknown>
   } catch {
     payload = { body: pushEvent.data?.text() || 'New reminder' }
   }
 
-  const title = typeof payload.title === 'string' ? payload.title : 'Obsidian reminder'
-  const body = typeof payload.body === 'string' ? payload.body : 'You have a new reminder.'
+  const title = typeof payload.title === 'string' ? payload.title : 'Reminder'
+  const body =
+    typeof payload.body === 'string'
+      ? payload.body
+      : "New reminder, maybe it's something important? ;)"
+  // Should be a deeplink to Obsidian
   const url = typeof payload.url === 'string' ? payload.url : `${BASE}/`
 
   pushEvent.waitUntil(
@@ -118,7 +115,6 @@ sw.addEventListener('notificationclick', event => {
   notificationEvent.notification.close()
 
   const notificationData = notificationEvent.notification?.data as { url?: unknown } | undefined
-
   const targetUrl = typeof notificationData?.url === 'string' ? notificationData.url : `${BASE}/`
 
   notificationEvent.waitUntil(
@@ -127,14 +123,10 @@ sw.addEventListener('notificationclick', event => {
       .then((clients: readonly WindowClient[]) => {
         for (const client of clients) {
           const clientUrl = new URL(client.url)
-          if (clientUrl.pathname.startsWith(BASE) && 'focus' in client) {
-            return client.focus()
-          }
+          if (clientUrl.pathname.startsWith(BASE) && 'focus' in client) return client.focus()
         }
 
-        if (sw.clients.openWindow) {
-          return sw.clients.openWindow(targetUrl)
-        }
+        if (sw.clients.openWindow) return sw.clients.openWindow(targetUrl)
 
         return undefined
       })
