@@ -38,7 +38,7 @@ export const initVapidKeys = () => {
   if (!vapidKeys) return
   const isDev = process.env.ENV === 'dev'
   // port from package.json
-  const pwaUrl = `${isDev ? 'http://localhost:5500/notifications' : process.env.PWA_URL}?pubKey=${vapidKeys.publicKey}`
+  const pwaUrl = `${isDev ? 'http://localhost:5500/notifications' : process.env.PWA_URL}/notifications?pubKey=${vapidKeys.publicKey}`
 
   webpush.setVapidDetails(
     'https://hardevv.github.io/RemindAir',

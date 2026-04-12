@@ -1,5 +1,5 @@
 import webpush from 'web-push'
-import { PUSH_SUBSCRIPTIONS_PATH, REDIRECTION_PAGE_URL } from '../consts'
+import { PUSH_SUBSCRIPTIONS_PATH } from '../consts'
 import { logger } from '../logger'
 import type { Reminder } from '../types'
 import {
@@ -23,7 +23,9 @@ export const sendWebPush = async ({ vaultName, filePath, id, content }: Reminder
     : null
 
   const redirectionBase =
-    process.env.ENV === 'dev' ? 'http://localhost:5500/redirection' : REDIRECTION_PAGE_URL
+    process.env.ENV === 'dev'
+      ? 'http://localhost:5500/redirection'
+      : `${process.env.PWA_URL}/redirection`
 
   // TODO: it should not have redirection page url if it's send to PWA, pwa should just redirect
   const url = obsidianLink
@@ -47,12 +49,12 @@ export const sendWebPush = async ({ vaultName, filePath, id, content }: Reminder
         await webpush.sendNotification(subscription, JSON.stringify(payload))
       } catch (error) {
         const statusCode = (error as { statusCode?: number }).statusCode
+        logger.error(`Failed to send web push for reminder ${id}: ${(error as Error).message}`)
+
         if (statusCode === 404 || statusCode === 410) {
           deadEndpoint.add(subscription.endpoint)
           return
         }
-
-        logger.error(`Failed to send web push for reminder ${id}: ${(error as Error).message}`)
       }
     })
   )
